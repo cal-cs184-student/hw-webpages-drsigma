@@ -23,6 +23,14 @@
 			body {
 				font-family: 'Inter', sans-serif;
 			}
+			code {
+				background-color: #f4f4f4;
+				padding: 2px 4px;
+				border-radius: 4px;
+				font-family: monospace;
+				font-size: 90%;
+				border: 1px solid #ddd;
+			}
 		</style>
 	</head>
 	<body>
@@ -64,11 +72,11 @@
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
 			  <tr>
 				<td style="text-align: center;">
-				  <img src="task1_test4.png" width="400px"/>
+				  <img src="task1_test4.png" width="600px"/>
 				  <figcaption>Test 4</figcaption>
 				</td>
 				<td style="text-align: center;">
-				  <img src="task1_test6.png" width="400px"/>
+				  <img src="task1_test6.png" width="600px"/>
 				  <figcaption>Test 6</figcaption>
 				</td>
 			  </tr>
@@ -76,29 +84,41 @@
 		</div>
 		
 		<h2>Task 2: Antialiasing by Supersampling</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		<p>For this task I implemented a supersampling method for antialiasing. In order to perform the supersampling
+			at given sampling rate, I had to modify several functions. First, instead of directly sampling
+			and filling in colors at each pixel location, I changed the sample buffer such that it is larger
+			than the frame buffer by a factor of the sample rate so that it can contain all the sampled color information.
+			This means editing the <code>rasterize_triangle()</code> fucntion so that it no longer calls <code>fill_pixel()</code>,
+			and instead fills colors into the sample buffer. Then, all the colors corresponding to the same pixel in the sample
+			buffer are averaged in the <code>resolve_to_framebuffer()</code> function. I also had to modify the <code>fill_pixel()</code>
+			function so that it fills in all locations in the sample buffer that correspond to the same pixel with the same color. This
+			is required since functions drawing points and lines are relying on this function.
+		</p>
+		<p>The successful implementation of this supersampling algorithm can be seen in the examples below. The sampling rate value
+			corresponds to how many samples are taken within one pixel. With increasing sampling rate, the edges of the triangles
+			appear less and less jagged using supersampling as the antialiasing method.
+		</p>
 		
-		<p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
 		<div style="display: flex; flex-direction: column; align-items: center;">
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
 			  <tr>
 				<td style="text-align: center;">
-				  <img src="lion.jpg" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
+				  <img src="task2_s1.png" width="400px"/>
+				  <figcaption>Sampling rate = 1.</figcaption>
 				</td>
 				<td style="text-align: center;">
-				  <img src="lion.jpg" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
+				  <img src="task2_s4.png" width="400px"/>
+				  <figcaption>Sampling rate = 4.</figcaption>
 				</td>
 			  </tr>
 			  <tr>
 				<td style="text-align: center;">
-				  <img src="lion.jpg" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
+				  <img src="task2_s9.png" width="400px"/>
+				  <figcaption>Sampling rate = 9.</figcaption>
 				</td>
 				<td style="text-align: center;">
-				  <img src="lion.jpg" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
+				  <img src="task2_s16.png" width="400px"/>
+				  <figcaption>Sampling rate = 12.</figcaption>
 				</td>
 			  </tr>
 			</table>
