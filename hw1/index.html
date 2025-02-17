@@ -46,17 +46,22 @@
 
 		Link to GitHub repository: <a href="https://github.com/cal-cs184-student/sp25-hw1-tea">https://github.com/cal-cs184-student/sp25-hw1-tea</a>
 
-		<figure>
-			<img src="lion.jpg" alt="Lion" style="width:50%"/>
-			<figcaption>You can add images with captions!</figcaption>
-		</figure>
+		<!-- <figure>
+			<img src="custom_s16_Lzero_Pnear.png" alt="Lion" style="width:50%"/>
+			<figcaption></figcaption>
+		</figure> -->
 
 		<!--
 		We've already added one heading per task, to make your write-up as navigable when grading. Please fit your write-up within these sections!
 		-->
 
 		<h2>Overview</h2>
-		Give a high-level overview of what you implemented in this homework. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the homework.
+		<p>
+			This assignment introduces a basic rasterization pipeline and involves a lot of exercises for different
+			sampling methods. By completing this assignment I praticed antialiasing methods using supersampling, pixel
+			sampling, and mipmap level sampling methods. As a results I am able to render various .svg files using the functions
+			I implemented.
+		</p>
 
 		<h2>Task 1: Drawing Single-Color Triangles</h2>
 
@@ -104,38 +109,242 @@
 			  <tr>
 				<td style="text-align: center;">
 				  <img src="task2_s1.png" width="400px"/>
-				  <figcaption>Sampling rate = 1.</figcaption>
+				  <figcaption>Sampling rate = 1</figcaption>
 				</td>
 				<td style="text-align: center;">
 				  <img src="task2_s4.png" width="400px"/>
-				  <figcaption>Sampling rate = 4.</figcaption>
+				  <figcaption>Sampling rate = 4</figcaption>
 				</td>
 			  </tr>
 			  <tr>
 				<td style="text-align: center;">
 				  <img src="task2_s9.png" width="400px"/>
-				  <figcaption>Sampling rate = 9.</figcaption>
+				  <figcaption>Sampling rate = 9</figcaption>
 				</td>
 				<td style="text-align: center;">
 				  <img src="task2_s16.png" width="400px"/>
-				  <figcaption>Sampling rate = 12.</figcaption>
+				  <figcaption>Sampling rate = 12</figcaption>
 				</td>
 			  </tr>
 			</table>
 		</div>
 		<h2>Task 3: Transforms</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		<p>For this task, I implemented the three functions in the transforms classs <code>translate</code>, 
+		<code>rotate</code>, and <code>scale</code>. Each of these functions takes 2D transform inputs and
+		outputs the 3-by-3 matrix used in applying transformations using homoegeneous coordinates.</p>
+		<p>The images below shows how I can use the transform functions to draw different motions. My
+			robot is doing jumping jacks in the pictures.
+		</p>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="task3_original.png" width="500px"/>
+				  <figcaption>Original robot image</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="task3_jumping.png" width="500px"/>
+				  <figcaption>My robot image</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
 
 		<h2>Task 4: Barycentric coordinates</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		<p>For this task I reused most my code in Task 1 and whenever a sample location is inside the triangle, I computed the
+		Barycentric coordinates for that sample location. The coordinate values are then used to compute the color of the sample. 
+		The color wheel in Test 7 is visualized below.
+		</p>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="task4_test7.png" width="700px"/>
+				  <figcaption>Test 7</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
 
 		<h2>Task 5: "Pixel sampling" for texture mapping</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		<p>Two pixel sampling methods are implemented in this task: nearest and bilinear sampling. I reused most of the
+			rasteriztion code from previous tasks, and instead of using barycentric coordinates to perform color interpolation,
+			I am using it to interpolate for the correct (u,v) texture coordinates. In the rasterization pipeline, the (u,v) coordinates
+			of the corners are also flipped if the triangle is not already counter-clockwise.
+		</p>
+		<p>For each sample location, texture sampling is performed. For linear sampling, this means using the interpolated (u,v) coordinates
+			and mapping it to the nearest texel color. For bilinear sampling, the nearest four texel colors are used, and then interpolated
+			using the bilinear interpolation method.
+		</p>
+		<p>As a result, both sampling methods can be used to rasterize an image. From the example shown below, it is obvious that nearest sampling
+			creates some aliasing effect on small features. For example the equator and longtitude lines appear broken or jagged in some locations
+			when using nearest sampling, whereas bilinear filtering reduces this effect. This effect becomes less apparent when using higher sampling
+			frequency which also has antialiasing effect.
+		</p>
+
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="task5_s1_near.png" width="400px"/>
+				  <figcaption>Sampling rate = 1, Nearest</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="task5_s1_lin.png" width="400px"/>
+				  <figcaption>Sampling rate = 1, Bilinear</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="task5_s16_near.png" width="400px"/>
+				  <figcaption>Sampling rate = 16, Nearest</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="task5_s16_lin.png" width="400px"/>
+				  <figcaption>Sampling rate = 16, Bilinear</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
 
 		<h2>Task 6: "Level Sampling" with mipmaps for texture mapping</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		<p>In this task three different level sampling methods are implemented: zero, nearest, and linear interpolation.
+			zero level sampling means always using the full resolution texture map, where as the other two methods use mipmapping
+			and either uses the most appropriate level of texuture map or uses the interpolated color value between two adjacent texture maps.
+			In order to perform these different types of texture mapping I implemented the functions <code>Texture::sample()</code> and
+			<code>Texture::get_level()</code>. Then I just need to call the sampling function in the rasterization pipeline and pass in
+			the desired methods. 
+		</p>		
+		
+		<p>
+			How different texutre map levels are used on a single image can be visualized in the image below. Here 0th level would be denoted as the
+			color black and the heightest possible mipmap level is encoded with white. From the given examples, test5 and text6 seem to show the mipmapping
+			effect most clearly.
+		</p>
 
-		<h2>(Optional) Task 7: Extra Credit - Draw Something Creative!</h2>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="task6_debug_test5.png" width="400px"/>
+				  <figcaption>Test 5 mipmap level visualization</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="task6_debug_test6.png" width="400px"/>
+				  <figcaption>Test 6 mipmap level visualization</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
+
+		<p>Using one of the provided examples, the effect of level sampling can be compared. Both nearest and linear
+			methods have antialiasing effects, but in this case the linear interpolation methods seems to perserve more
+			small details of the campanile.
+		</p>
+
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			<tr>
+				<td style="text-align: center;">
+				<img src="task6_s1_l0.png" width="300px"/>
+				<figcaption>Sampling rate = 1,<br> L_ZERO, P_NEAREST</figcaption>
+				</td>
+				<td style="text-align: center;">
+				<img src="task6_s1_lnear.png" width="300px"/>
+				<figcaption>Sampling rate = 1,<br> L_NEAREST, P_NEAREST</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="task6_s1_llin.png" width="300px"/>
+					<figcaption>Sampling rate = 1,<br> L_LINEAR, P_NEAREST</figcaption>
+				</td>
+			</tr>
+			</table>
+		</div>
+
+		<p>As a final remark about all the sampling methods implemented so far, the cheapest methods
+			in pixel sampling, level sampling, and supersampling are <code>P_NEAREST</code>, <code>L_ZERO</code>,
+			and <code>rate=1</code>, respectively. But all of these methods result in some aliasing effects inevitably.
+			Among these methods, bilinear interpolation pixel sampling is perhaps more memory efficient since it doesn't require storing mipmap
+			of the same texture or increasing the sample buffer size, while this method still requires performing more operations
+			and thus reduces the computation speed. Supersampling is more memory-consuming than level sampling, since the space
+			required to store the sampled colors scale up very quckly, but as shown in the example below, despite the inefficiency
+			in time and memory, supersampling appears to be the most effective method in antialiasing. Level sampling, while more memory efficent
+			than supersampling, appears to have a blurring effect, casuing the image to lose some details during this process.
+		</p>
+
+		<p>The example below shows a detailed comparison between all the sampling methods explored in this assignment.</p>
+		
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="custom_texture.png" width="200px"/>
+				  <figcaption>Original texture</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
+
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="custom_s1_Lzero_Pnear.png" width="200px"/>
+				  <figcaption>Sampling rate = 1,<br> L_ZERO, P_NEAREST</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="custom_s1_Lzero_Plin.png" width="200px"/>
+				  <figcaption>Sampling rate = 1,<br> L_ZERO, P_LINEAR</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="custom_s1_Lnear_Pnear.png" width="200px"/>
+					<figcaption>Sampling rate = 1,<br> L_NEAREST, P_NEAREST</figcaption>
+				  </td>
+				  <td style="text-align: center;">
+					<img src="custom_s1_Lnear_Plin.png" width="200px"/>
+					<figcaption>Sampling rate = 1,<br> L_NEAREST, P_LINEAR</figcaption>
+				  </td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="custom_s4_Lzero_Pnear.png" width="200px"/>
+				  <figcaption>Sampling rate = 4,<br> L_ZERO, P_NEAREST</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="custom_s4_Lzero_Plin.png" width="200px"/>
+				  <figcaption>Sampling rate = 4,<br> L_ZERO, P_LINEAR</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="custom_s4_Lnear_Pnear.png" width="200px"/>
+					<figcaption>Sampling rate = 4,<br> L_NEAREST, P_NEAREST</figcaption>
+				  </td>
+				  <td style="text-align: center;">
+					<img src="custom_s4_Lnear_Plin.png" width="200px"/>
+					<figcaption>Sampling rate = 4,<br> L_NEAREST, P_LINEAR</figcaption>
+				  </td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="custom_s16_Lzero_Pnear.png" width="200px"/>
+				  <figcaption>Sampling rate = 16,<br> L_ZERO, P_NEAREST</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="custom_s16_Lzero_Plin.png" width="200px"/>
+				  <figcaption>Sampling rate = 16,<br> L_ZERO, P_LINEAR</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="custom_s16_Lnear_Pnear.png" width="200px"/>
+					<figcaption>Sampling rate = 16,<br> L_NEAREST, P_NEAREST</figcaption>
+				  </td>
+				  <td style="text-align: center;">
+					<img src="custom_s16_Lnear_Plin.png" width="200px"/>
+					<figcaption>Sampling rate = 16,<br> L_NEAREST, P_LINEAR</figcaption>
+				  </td>
+			  </tr>
+			</table>
+		</div>
+
+		<!-- <h2>(Optional) Task 7: Extra Credit - Draw Something Creative!</h2>
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 		<h2>Additional Notes (please remove)</h2>
@@ -147,7 +356,7 @@
 					<li>You can write display equations like so: \[ a^2 + b^2 = c^2 \]</li>
 				</ul>
 			</li>
-		</ul>
+		</ul> -->
 		</div>
 	</body>
 </html>
