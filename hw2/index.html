@@ -1,5 +1,11 @@
 <html>
 	<head>
+		<script type="text/x-mathjax-config">
+			MathJax.Hub.Config({
+			  "HTML-CSS": { scale: 90 }, // Adjust percentage as needed
+			  SVG: { scale: 90 }
+			});
+		</script>
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=default'></script>
 		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 		<style>
@@ -12,6 +18,12 @@
 				padding: 60px 20%;
 			}
 
+			p {
+    			line-height: 1.6; /* Adjust the number as needed */
+			}
+
+
+
 			figure {
 				text-align: center;
 			}
@@ -23,24 +35,32 @@
 			body {
 				font-family: 'Inter', sans-serif;
 			}
+			code {
+				background-color: #f4f4f4;
+				padding: 2px 4px;
+				border-radius: 4px;
+				font-family: monospace;
+				font-size: 90%;
+				border: 1px solid #ddd;
+			}
 		</style>
 	</head>
 	<body>
 		<div class="container">
 		<h1>CS184/284A Spring 2025 Homework 2 Write-Up</h1>
-		<div style="text-align: center;">Names: </div>
+		<div style="text-align: center;">Names: Teaya Yang</div>
 
 		<br>
 
-		Link to webpage: (TODO) <a href="https://cs184.eecs.berkeley.edu/sp25">cs184.eecs.berkeley.edu/sp25</a>
+		Link to webpage: <a href="https://cal-cs184-student.github.io/hw-webpages-drsigma/hw2/index.html">https://cal-cs184-student.github.io/hw-webpages-drsigma/hw2/index.html</a>
 
 		<br>
 		
-		Link to GitHub repository: (TODO) <a href="https://cs184.eecs.berkeley.edu/sp25">cs184.eecs.berkeley.edu/sp25</a>
+		Link to GitHub repository: <a href="https://github.com/cal-cs184-student/sp25-hw2-ty2.git">https://github.com/cal-cs184-student/sp25-hw2-ty2.git</a>
 
 		<figure>
-			<img src="teapot.png" alt="Teapot" style="width:50%"/>
-			<figcaption>You can add images with captions!</figcaption>
+			<img src="t2_s6_ex2_3.png" alt="Teapot" style="width:50%"/>
+			<figcaption></figcaption>
 		</figure>
 
 		<!--
@@ -48,57 +68,299 @@
 		-->
 
 		<h2>Overview</h2>
-		Give a high-level overview of what you implemented in this homework. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the homework.
+		This homework is about mesh operations and data structures and it consists of two sections. Section 1 focuses
+		on Bezier curves and surfaces, Section 2 focuses on mesh operations with half-edge data structure. I implemented
+		operations like edge flip, edge split, and loop subdivision as a part of this homework, see sections below.
 
 		<h2>Section I: Bezier Curves and Surfaces</h2>
 
 		<h3>Part 1: Bezier curves with 1D de Casteljau subdivision</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
-		<p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
+		<p>For this part I implemented a 1-step subdivision according to the de Casteljau subdivision in the function called
+			<code>BezierCurve::evaluateStep()</code>. The function takes a list of \(n\) 2D points, and the output is a list of \(n-1\)
+			intermediate points interpolated using \( p_i' = (1-t)p_i + tp_{i+1}\) where \(i = 1, ..., n-1\). The implementation
+			of the function is simply first evaluating the input vector length \(n\), then constructing a ouptut vector of length
+			\(n-1\) where each element is filled in using the equation for \(p_i'\). This function is performed by toggling the
+			 <code>E</code> button, as visualized below. After recursive subdivisions are performed until there is a single point, the
+			 point lies on the Bezier curve with parameter \(t\). The effect of changing \(t\) is also visualized below.
+		</p>
+		
+		
 		<div style="display: flex; flex-direction: column; align-items: center;">
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
 			  <tr>
 				<td style="text-align: center;">
-				  <img src="teapot.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
+				  <img src="s1t1_1.gif" width="400px"/>
+				  <figcaption>GIF showing levels of subdivision.</figcaption>
 				</td>
 				<td style="text-align: center;">
-				  <img src="teapot.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-			  </tr>
-			  <tr>
-				<td style="text-align: center;">
-				  <img src="teapot.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-				<td style="text-align: center;">
-				  <img src="teapot.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
+				  <img src="s1t1_2.gif" width="400px"/>
+				  <figcaption>GIF showing effect of varying parameter \(t\).</figcaption>
 				</td>
 			  </tr>
 			</table>
 		</div>
 
+
+		
+
 		<h3>Part 2: Bezier surfaces with separable 1D de Casteljau</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		<p>This part of the assignment implements how smooth Bezier surfaces are evaluated. Bezier surfaces are defined
+			using a grid of control points, and interpolation is used to evaluate each point on the surface. In this assignment,
+			I first implemented the helper function <code>evaluateStep()</code> similar to the part above, except now the function
+			handles 3D points used on the surface. Another helper function, <code>evaluate1D()</code> executes the interpolation
+			recursively until only one point which lies on the bezier curve remains. Finally, the function <code>evaluate()</code>
+			takes in a grid of control points and the parameters \((u,v)\) to determine a point on the Bezier surface.
+		</p>
+		<p>To determine the Bezier surface using a grid of control points, we first iterate through each row of control points
+			which represent control points for a curve that is parameterized by \(u\). By calling the helper function <code>evaluate1D()</code>,
+			an intermediate control point \(P_i\) results from each row of original control points. Finally, by calling the function again
+			on all intermeidate control points which describe a Bezier curve parameterized by \(v\), we arrive at a single point parameterized by
+			\((u,v)\) on the Bezier surface.
+		</p>
+		<p>As a result, using a <code>.bez</code> file which includes the coordinates of the control points, one can
+		easily render meshes using the functions implemented, like the teapot example shown below.</p>
+		<figure>
+			<img src="s1t2_1.png" alt="Teapot" style="width:50%"/>
+			<figcaption>Resulting teapot mesh defined using Bezier surface.</figcaption>
+		</figure>
 
 		<h2>Section II: Triangle Meshes and Half-Edge Data Structure</h2>
 
 		<h3>Part 3: Area-weighted vertex normals</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		<p>
+			In this section, I implemented the area-weighted normal calculation for a given vertex using the function
+			<code>Vertex::normal()</code>. This implementation takes advantage of the half-edge data structure. First,
+			we must traverse through each neighbouring face of the current vertex. Using the half-edge data structure, if <code>h</code>
+			is the half-edge originating fromt the current vertex, then <code>h->twin()->next()</code> is a half edge on the
+			next neighbouring face. Using this line repeatedly until we return to the original half-edge, we can traverse through
+			all the neighbouring faces exactly once. At each neighbouring face, we compute the normal and the area of that face. This
+			is done by first finding the location of the three vertices \(v_0,v_1,v_2\) of the triangle mesh in CCW order, then using
+			\(n = (v_1-v_0)\times(v_2-v0)\) and \(A=\frac{1}{2}||n||\) to compute the normal vector and the area, respectively. Finally,
+			we normalize the contribution of each normal vector from the neighbouring faces with their areas.
+		</p>
+		<p>This implementation of area-weighted normal allows Phong shading to be applied, as seen in the example below.</p>
+
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="s2_t3_1.png" width="400px"/>
+				  <figcaption>Flat shading</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="s2_t3_2.png" width="400px"/>
+				  <figcaption>Phong shading using area-weighted normal</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
 
 		<h3>Part 4: Edge flip</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		<p>In order to perform the edge flip, many elements of the half-edge data structure need to have modified pointers
+			to other elements, while the total number of elements does not change. In order to implement the function <code>HalfedgeMesh::flipEdge()</code>
+			correctly, I followed closely the diagram from lecture below:
+		</p>
+
+		<figure>
+			<img src="s2_t4_lec.png" alt="Teapot" style="width:50%"/>
+			<figcaption>Sketch for edge flip from Lecture 8 slides</figcaption>
+		</figure>
+
+		<p>Following this diagram, there are a total of 6 inner half-edges, 4 vertices, 5 edges, and 2 faces in this operation.
+			Notably the outer half-edges never change, so we do not need to consider them. Among these, after the edge flip 2 half-edges,
+			1 edge, and both triangles change their names, along with a lot of reassignment within all these elements. To avoid mistakes
+			in my implementation, I named my variables exactly as indicated in this diagram. My implementation includes three main steps:
+			1) assign all elements to variables with the names on the right image, 2) rename the corresponding elements according to the left
+			image, and 3) reassign all points in all the elements. As a result, no further debugging steps were needed.
+		</p>
+
+
+
+		<p>The implemented edge flip is performed with the <code>F</code> key in the GUI. Below are a few example of edge flips.</p>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="s2_t4_1.png" width="400px"/>
+				  <figcaption>edge 1</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="s2_t4_2.png" width="400px"/>
+				  <figcaption>flipped edge 1</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="s2_t4_3.png" width="400px"/>
+				  <figcaption>edge 2</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="s2_t4_4.png" width="400px"/>
+				  <figcaption>flipped edge 2</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="s2_t4_5.png" width="400px"/>
+				  <figcaption>edge 3</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="s2_t4_6.png" width="400px"/>
+				  <figcaption>flipped edge 3</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
 
 		<h3>Part 5: Edge split</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		<p>I implemented edge split in this assignment, closely following the diagram from lecture again:</p>
+		<figure>
+			<img src="s2_t5_lec.png" alt="Teapot" style="width:50%"/>
+			<figcaption>Sketch for edge split from Lecture 8 slides</figcaption>
+		</figure>
+		<p>Once again, I name all the components in my code according to the names in this picture. Unlike edge flip, edge split
+			requires mesh elements to be deleted and created. Specifically, we need to create 8 half-edges, 1 vertex, 4 edges and 4 new
+			faces, while 2 half-edges, 1 edge, and the 2 original faces need to be deleted. I followed a similar coding process as the previous
+			task, where I first assigned all original mesh elements to pointer variables, then I created the new elements. Next, I assigned 
+			everything for the mesh elements in the new mesh, and at the very end deleted the components that are no longer needed. While I caught
+			a few errors caused by typos in my code, no further debugging was really needed. See the examples below that show the successful implementation
+			of edge split.
+		</p>
+
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+					<img src="s2_t5_ex1_2.png" width="300px"/>
+					<figcaption>original mesh</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="s2_t5_ex1_3.png" width="300px"/>
+					<figcaption>after 1 flip</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="s2_t5_ex1_4.png" width="300px"/>
+					<figcaption>after 1 split</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+					<img src="s2_t5_ex2_1.png" width="300px"/>
+					<figcaption>original mesh</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="s2_t5_ex2_2.png" width="300px"/>
+					<figcaption>after 1 flip</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="s2_t5_ex2_3.png" width="300px"/>
+					<figcaption>after 1 split</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+					<img src="s2_t5_ex3_1.png" width="300px"/>
+					<figcaption>original mesh</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="s2_t5_ex3_2.png" width="300px"/>
+					<figcaption>after 1 split</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="s2_t5_ex3_3.png" width="300px"/>
+					<figcaption>after many splits</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
+
 
 		<h3>Part 6: Loop subdivision for mesh upsampling</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		<p>To implement the loop subdivision, I followed strictlyt the suggested steps: 1) compute positions of original vertices
+			according to <code>(1 - n * u) * original_position + u * original_neighbor_position_sum</code> where n is the degree of the 
+			vertex and u is 3/16 if n is 3 and 3/(8n) otherwise; 2) compute positions of new vertices
+			in the mesh using <code>3/8 * (A + B) + 1/8 * (C + D)</code> where A, B, C, D are positions of neighbouring original vertices;
+			3) split every mesh in the edge while keeping track of which edges are newly created; 4) flipping new edges which are connected to
+			one original vertex and one new vertex; 5) update vertex positions computed in steps 1 and 2. Since this part involves many steps,
+			I tested the function everytime I fished one of the steps to see if the result is expected.
+		</p>
+		<p>Loop subdivision is effective in smoothing out the surfaces, but it also smoothes out features. This is very apparant in the cube
+			example below. The way to prevent features from being smoothed out is to have many close-together mesh structures in the original mesh,
+			like in the teapot example where the meshes are much finer near the cap or the opening of the pot.
+		</p>
+		<p>The cube example looks asymetrical because we are using triangular meshes, which breaks the symetrical geometric property of the cube.
+			By simply splitting the edges on every face of the cube to make the pattern on each face symetrical, we can eliminate this effect caused
+			by subdivision.
+		</p>
 
-		<h2>(Optional) Section III: Potential Extra Credit - Art Competition: Model something Creative</h2>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+					<img src="t2_s6_ex1_1.png" width="300px"/>
+					<figcaption>original mesh</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="t2_s6_ex1_2.png" width="300px"/>
+					<figcaption>after 1 subdivision</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="t2_s6_ex1_3.png" width="300px"/>
+					<figcaption>after 2 subdivisions</figcaption>
+				</td>
+			  </tr>
+
+			  <tr>
+				<td style="text-align: center;">
+					<img src="t2_s6_ex2_1.png" width="300px"/>
+					<figcaption>original mesh</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="t2_s6_ex2_2.png" width="300px"/>
+					<figcaption>after 1 subdivision</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="t2_s6_ex2_3.png" width="300px"/>
+					<figcaption>after 2 subdivisions</figcaption>
+				</td>
+			  </tr>
+
+			  <tr>
+				<td style="text-align: center;">
+					<img src="t2_s6_ex3_1.png" width="300px"/>
+					<figcaption>original mesh</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="t2_s6_ex3_2.png" width="300px"/>
+					<figcaption>after 1 subdivision</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="t2_s6_ex3_3.png" width="300px"/>
+					<figcaption>after 2 subdivisions</figcaption>
+				</td>
+			  </tr>
+
+			  <tr>
+				<td style="text-align: center;">
+					<img src="t2_s6_ex4_1.png" width="300px"/>
+					<figcaption>original mesh</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="t2_s6_ex4_2.png" width="300px"/>
+					<figcaption>after 1 subdivision</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="t2_s6_ex4_3.png" width="300px"/>
+					<figcaption>after 3 subdivisions</figcaption>
+				</td>
+			  </tr>
+			  
+
+			</table>
+		</div>
+
+		<!-- <h2>(Optional) Section III: Potential Extra Credit - Art Competition: Model something Creative</h2>
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 		<h2>Additional Notes (please remove)</h2>
@@ -110,7 +372,7 @@
 					<li>You can write display equations like so: \[ a^2 + b^2 = c^2 \]</li>
 				</ul>
 			</li>
-		</ul>
+		</ul> -->
 		</div>
 	</body>
 </html>
